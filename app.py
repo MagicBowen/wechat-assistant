@@ -61,9 +61,26 @@ app = Flask(__name__)
 CORS(app) 
 thread = Thread()
 
-def wechat_login(itchat):
+def wechat_api_login(itchat):
     itchat.auto_login(hotReload=True)
     itchat.run(True)
+    
+@app.route('/login')
+def wechat_login():
+    global thread
+    uuid = itchat.get_QRuuid()
+    itchat.get_QR(uuid=uuid, qrCallback=QR_to_b64)
+    print(thread.is_alive())
+    if thread.is_alive():
+        return jsonify({'success': 0, 'msg': '已有登陆线程存在' })
+
+    thread = Thread(target = wechat_api_login, args = (itchat, ))
+    thread.start()
+    return jsonify({'success': 1, 'qr': qr_b64.decode("utf-8") })
+
+@app.route('/qrcode', methods=['GET'])
+def query_qrcode():
+    return send_file("./QR.png", mimetype='image/jpeg')
 
 @app.route('/profile', methods=['GET'])
 def query_image():
@@ -87,7 +104,7 @@ def index():
     return "Welcome to wechat assistant!"
 
 if __name__ == '__main__':
-    thread = Thread(target = wechat_login, args = (itchat, ))
+    thread = Thread(target = wechat_api_login, args = (itchat, ))
     thread.start()
     app.run(host='0.0.0.0', port=PORT, debug=True)
     
