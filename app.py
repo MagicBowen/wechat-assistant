@@ -63,24 +63,24 @@ def text_reply(msg):
 ############################################################
 app = Flask(__name__)
 CORS(app) 
-thread = Thread()
+# thread = Thread()
 
 def wechat_api_login(itchat):
     itchat.auto_login(hotReload=True)
     itchat.run(True)
     
-@app.route('/login')
-def wechat_login():
-    global thread
-    uuid = itchat.get_QRuuid()
-    itchat.get_QR(uuid=uuid, qrCallback=QR_to_b64)
-    print(thread.is_alive())
-    if thread.is_alive():
-        return jsonify({'success': 0, 'msg': '已有登陆线程存在' })
+# @app.route('/login')
+# def wechat_login():
+#     global thread
+#     uuid = itchat.get_QRuuid()
+#     itchat.get_QR(uuid=uuid, qrCallback=QR_to_b64)
+#     print(thread.is_alive())
+#     if thread.is_alive():
+#         return jsonify({'success': 0, 'msg': '已有登陆线程存在' })
 
-    thread = Thread(target = wechat_api_login, args = (itchat, ))
-    thread.start()
-    return jsonify({'success': 1, 'qr': qr_b64.decode("utf-8") })
+#     thread = Thread(target = wechat_api_login, args = (itchat, ))
+#     thread.start()
+#     return jsonify({'success': 1, 'qr': qr_b64.decode("utf-8") })
 
 @app.route('/qrcode', methods=['GET'])
 def query_qrcode():
