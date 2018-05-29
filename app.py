@@ -28,8 +28,8 @@ def text_reply(msg):
 
     myself = itchat.search_friends()
 
-    print(msg)
-    print(myself)
+    # print(msg)
+    # print(myself)
 
     global MSG_ID
     forward_msg = {
@@ -49,12 +49,15 @@ def text_reply(msg):
         # "vedio" : "http://localhost/vedio/abc.mp4"
     }
 
-    r = requests.post(RORWARD_URL, json=forward_msg)
-    if r.status_code == 200:
-        MSG_ID = MSG_ID + 1
-        print('received msg [{0} : {1}] from [{2}] to [{3}]'.format(msg['MsgType'], msg['Content'], sender['NickName'], myself['NickName']))
-    else:
-        print('send msg to telegram failed!')
+    try :
+        r = requests.post(RORWARD_URL, json=forward_msg)
+        if r.status_code == 200:
+            MSG_ID = MSG_ID + 1
+            print('received msg [{0} : {1}] from [{2}] to [{3}]'.format(msg['MsgType'], msg['Content'], sender['NickName'], myself['NickName']))
+        else:
+            print('send msg to telegram failed!')
+    except Exception as e:
+        print('send msg to telegram failed, exception occurred!')
 
 
 ############################################################
