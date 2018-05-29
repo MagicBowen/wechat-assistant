@@ -23,7 +23,7 @@ MSG_ID = 101101
 def text_reply(msg):
     senderId = msg['FromUserName']
     sender = itchat.search_friends(userName=senderId)
-    profilePath = './profiles/{0}.png'.format(sender['NickName'])
+    profilePath = './profiles/{0}.png'.format(sender['PYQuanPin'])
     from_profile = itchat.get_head_img(userName = senderId, picDir = profilePath)
 
     myself = itchat.search_friends()
