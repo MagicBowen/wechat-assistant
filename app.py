@@ -37,8 +37,8 @@ def text_reply(msg):
         # "timestamp" : datetime.utcnow(),
         "from" : {
             "userId"   : senderId,
-            "username" : sender['NickName'],
-            "profile"  : '{0}/profile?name={1}.png'.format(HOST_URL, sender['NickName'])
+            "username" : sender['PYQuanPin'],
+            "profile"  : '{0}/profile?name={1}.png'.format(HOST_URL, sender['PYQuanPin'])
         },
         "to"  : {
             "userId"   : myself['NickName']
