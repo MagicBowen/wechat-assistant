@@ -5,6 +5,7 @@ from itchat.content import *
 from datetime import datetime
 from threading import Thread
 import requests
+import json
 
 
 ############################################################
@@ -29,9 +30,10 @@ def text_reply(msg):
     print(msg)
     print(myself)
 
+    global MSG_ID
     forward_msg = {
         "id"   : MSG_ID,
-        "timestamp" : datetime.utcnow(),
+        # "timestamp" : datetime.utcnow(),
         "from" : {
             "userId"   : senderId,
             "username" : sender['NickName'],
@@ -48,6 +50,7 @@ def text_reply(msg):
 
     r = requests.post(RORWARD_URL, json=forward_msg)
     if r.status_code == 200:
+        MSG_ID = MSG_ID + 1
         print('received msg [{0} : {1}] from [{2}] to [{3}]'.format(msg['MsgType'], msg['Content'], sender['NickName'], myself['NickName']))
     else:
         print('send msg to telegram failed!')
@@ -72,8 +75,12 @@ def send_msg():
     msg = request.json
     print('wechat assistant received msg:')
     print(msg)
-    author = itchat.search_friends(nickName=msg.to.userId)[0]
-    author.send(msg.text)
+    author = itchat.search_friends(nickName=msg['to']['userId'])
+    if type(author) == type([]):
+        author = author[0]
+    author.send(msg['text'])
+    return Response('success', status=200)
+
 
 @app.route('/')
 def index():
