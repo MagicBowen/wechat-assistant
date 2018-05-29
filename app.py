@@ -11,7 +11,8 @@ import json
 ############################################################
 DOMAIN = 'http://localhost'
 PORT = 8082
-HOST_URL = '{0}:{1}'.format(DOMAIN, PORT)
+# HOST_URL = '{0}:{1}'.format(DOMAIN, PORT)
+HOST_URL = 'https://www.magicbowen.top:443/wechat'
 
 RORWARD_URL = 'https://www.magicbowen.top:443/intramirror/msg'
 
